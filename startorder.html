@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coffee Order System</title>
+    <style>
+        body {
+            background-color: #f7e4c2;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f7e4c2;
+        }
+
+        header h1 {
+            color: #d76b33;
+            font-size: 30px;
+        }
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: 40px;
+        }
+
+        nav a:hover {
+            color: #d76b33;
+        }
+
+        /* Center the start order button vertically and horizontally */
+        .center-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+        }
+
+        /* Styling for the large call-to-action button */
+        .start-order-btn {
+            background-color: #d0a97f;
+            border: none;
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .start-order-btn:hover {
+            background-color: #b28b64;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Coffee Order System</h1>
+        <nav>
+            <a href="orderStatus.html">Order Status</a>
+        </nav>
+    </header>
+
+    <div class="center-wrapper">
+        <!-- This button takes the user to the beverage selection page -->
+        <button class="start-order-btn" onclick="location.href='order.html'">
+            Start Your Order Here
+        </button>
+    </div>
+</body>
+</html>

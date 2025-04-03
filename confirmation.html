@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            background-color: #f7e4c2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 60px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f7e4c2;
+        }
+
+        header h1 {
+            font-size: 30px;
+        }
+
+        header h1 a {
+            color: #d76b33;
+            text-decoration: none;
+        }
+
+        header h1 a:hover {
+            text-decoration: underline;
+        }
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: 40px;
+        }
+
+        nav a:hover {
+            color: #d76b33;
+        }
+
+        .content {
+            max-width: 600px;
+            margin: 100px auto 0 auto;
+            padding-left: 20px;
+        }
+
+        .content p {
+            font-weight: bold;
+            font-size: 24px;
+            margin: 20px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Clicking the title returns to the start page -->
+        <h1><a href="startorder.html">Coffee Order System</a></h1>
+        <nav>
+            <a href="orderStatus.html">Order Status</a>
+        </nav>
+    </header>
+
+    <div class="content">
+        <p>Order Placed:</p>
+        <p>Order id: <span id="order-id"></span></p>
+        <p id="order-details"></p>
+        <p>Total: $<span id="order-total"></span></p>
+    </div>
+
+    <script>
+        // Generate dummy order ID
+        const orderId = Math.floor(Math.random() * 100) + 1;
+        document.getElementById("order-id").innerText = orderId;
+
+        // Get beverage and condiments from localStorage
+        const beverage = localStorage.getItem('beverage');
+        const condiments = JSON.parse(localStorage.getItem('condiments') || "[]");
+
+        // Format sentence like "dark roast with milk and double mocha!"
+        function formatCondiments(conds) {
+            const count = {};
+            conds.forEach(item => count[item] = (count[item] || 0) + 1);
+
+            const phrased = Object.entries(count).map(([name, qty]) =>
+                qty === 1 ? name.toLowerCase() : `double ${name.toLowerCase()}`
+            );
+
+            return phrased.length > 0
+                ? `${beverage.toLowerCase()} with ${phrased.join(' and ')}!`
+                : `${beverage.toLowerCase()}!`;
+        }
+
+        // Insert dynamic order details
+        document.getElementById("order-details").innerText = formatCondiments(condiments);
+        document.getElementById("order-total").innerText = "4.50";
+    </script>
+</body>
+</html>

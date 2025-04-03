@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Your Beverage</title>
+    <style>
+        body {
+            background-color: #f7e4c2;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f7e4c2;
+        }
+
+        header h1 {
+            color: #d76b33;
+            font-size: 30px;
+        }
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: 40px;
+        }
+
+        nav a:hover {
+            color: #d76b33;
+        }
+
+        .main-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 50px;
+        }
+
+        .left-panel {
+            flex: 1;
+        }
+
+        .left-panel h2 {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            background-color: #d0a97f;
+            color: black;
+            font-weight: bold;
+            font-size: 22px;
+            padding: 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #b28b64;
+            transform: scale(1.05);
+        }
+
+        .btn.selected {
+            background-color: #7a614a;
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .right-panel {
+            width: 250px;
+            padding: 20px;
+            border: 3px solid black;
+            border-radius: 10px;
+            background-color: #f7e4c2;
+        }
+
+        .right-panel h3 {
+            color: #d76b33;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .summary-item {
+            background-color: #a0896d;
+            color: black;
+            font-weight: bold;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .confirm-btn {
+            background-color: #d0a97f;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .confirm-btn:hover {
+            background-color: #b28b64;
+        }
+
+        #condiments-section {
+            display: none;
+        }
+
+        #order-summary {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Coffee Order System</h1>
+        <nav>
+            <a href="orderstatus.html">Order Status</a>
+        </nav>
+    </header>
+
+    <div class="main-section">
+        <div class="left-panel">
+            <h2 id="main-title">Select the beverage</h2>
+
+            <div id="beverages" class="button-grid">
+                <button class="btn" onclick="selectBeverage('Dark Roast')">Dark Roast</button>
+                <button class="btn" onclick="selectBeverage('Espresso')">Espresso</button>
+                <button class="btn" onclick="selectBeverage('House Blend')">House Blend</button>
+                <button class="btn" onclick="selectBeverage('Decaf')">Decaf</button>
+            </div>
+
+            <div id="condiments-section">
+                <h2>Add the condiments</h2>
+                <div class="button-grid">
+                    <button class="btn" onclick="toggleCondiment('Milk')">Milk</button>
+                    <button class="btn" onclick="toggleCondiment('Mocha')">Mocha</button>
+                    <button class="btn" onclick="toggleCondiment('Soy')">Soy</button>
+                    <button class="btn" onclick="toggleCondiment('Whip')">Whip</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="order-summary" class="right-panel">
+            <h3>My Order</h3>
+            <div id="selected-beverage" class="summary-item" onclick="resetBeverage()" style="cursor: pointer;"></div>
+            <div id="selected-condiments"></div>
+            <button class="confirm-btn" onclick="confirmOrder()">Confirm Order</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedCondiments = new Set();
+
+        function selectBeverage(beverage) {
+            document.getElementById('main-title').style.display = "none";
+            document.getElementById('beverages').style.display = "none";
+            document.getElementById('condiments-section').style.display = "block";
+            document.getElementById('order-summary').style.display = "block";
+
+            document.getElementById('selected-beverage').innerText = beverage;
+
+            // Highlight the selected beverage
+            const buttons = document.querySelectorAll('#beverages .btn');
+            buttons.forEach(btn => {
+                if (btn.innerText === beverage) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+        }
+
+
+        function toggleCondiment(condiment) {
+            const buttons = document.querySelectorAll('.btn');
+            
+            buttons.forEach(btn => {
+                if (btn.innerText === condiment) {
+                    btn.classList.toggle('selected');
+                }
+            });
+
+            if (selectedCondiments.has(condiment)) {
+                selectedCondiments.delete(condiment);
+            } else {
+                selectedCondiments.add(condiment);
+            }
+
+            updateCondimentDisplay();
+        }
+
+        function updateCondimentDisplay() {
+            const container = document.getElementById('selected-condiments');
+            container.innerHTML = '';
+
+            selectedCondiments.forEach(condiment => {
+                const div = document.createElement('div');
+                div.className = 'summary-item';
+                div.innerText = condiment;
+                container.appendChild(div);
+            });
+        }
+
+        function resetBeverage() {
+            // Clear beverage and condiments
+            selectedCondiments.clear();
+            updateCondimentDisplay();
+
+            // Reset visibility
+            document.getElementById('main-title').style.display = "block";
+            document.getElementById('main-title').innerText = "Select the beverage";
+
+            document.getElementById('beverages').style.display = "grid";
+            document.getElementById('condiments-section').style.display = "none";
+            document.getElementById('order-summary').style.display = "none";
+
+            // Clear beverage text and deselect buttons
+            document.getElementById('selected-beverage').innerText = "";
+
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('selected');
+            });
+        }
+
+        function confirmOrder() {
+            const beverage = document.getElementById('selected-beverage').innerText;
+            const condiments = Array.from(selectedCondiments);
+
+            // Store values in localStorage
+            localStorage.setItem('beverage', beverage);
+            localStorage.setItem('condiments', JSON.stringify(condiments));
+
+            // Navigate to confirmation page
+            window.location.href = "confirmation.html";
+        }
+    </script>
+</body>
+</html>
