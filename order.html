@@ -250,12 +250,32 @@
             const beverage = document.getElementById('selected-beverage').innerText;
             const condiments = Array.from(selectedCondiments);
 
-            // Store values in localStorage
-            localStorage.setItem('beverage', beverage);
-            localStorage.setItem('condiments', JSON.stringify(condiments));
+            const orderData = {
+                beverage: beverage,
+                condiments: condiments
+            };
 
-            // Navigate to confirmation page
-            window.location.href = "confirmation.html";
+            fetch('http://127.0.0.1:8080/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to submit order');
+                }
+            })
+            .then(data => {
+                localStorage.setItem('receipt', JSON.stringify(data));
+                window.location.href = "confirmation.html";
+            })
+            .catch(error => {
+                alert("Could not confirm your order. Please try again.");
+            });
         }
     </script>
 </body>

@@ -63,7 +63,7 @@
         <!-- Clicking the title returns to the start page -->
         <h1><a href="startorder.html">Coffee Order System</a></h1>
         <nav>
-            <a href="orderStatus.html">Order Status</a>
+            <a href="orderstatus.html">Order Status</a>
         </nav>
     </header>
 
@@ -75,16 +75,14 @@
     </div>
 
     <script>
-        // Generate dummy order ID
-        const orderId = Math.floor(Math.random() * 100) + 1;
-        document.getElementById("order-id").innerText = orderId;
-
-        // Get beverage and condiments from localStorage
-        const beverage = localStorage.getItem('beverage');
-        const condiments = JSON.parse(localStorage.getItem('condiments') || "[]");
+        const receipt = JSON.parse(localStorage.getItem('receipt'));
 
         // Format sentence like "dark roast with milk and double mocha!"
-        function formatCondiments(conds) {
+        function formatCondiments(description) {
+            const parts = description.split(',').map(p => p.trim());
+            const beverage = parts[0];
+            const conds = parts.slice(1);
+            
             const count = {};
             conds.forEach(item => count[item] = (count[item] || 0) + 1);
 
@@ -97,9 +95,15 @@
                 : `${beverage.toLowerCase()}!`;
         }
 
-        // Insert dynamic order details
-        document.getElementById("order-details").innerText = formatCondiments(condiments);
-        document.getElementById("order-total").innerText = "4.50";
+        if (receipt) {
+            document.getElementById("order-id").innerText = receipt.id;
+            document.getElementById("order-details").innerText = formatCondiments(receipt.description);
+            document.getElementById("order-total").innerText = receipt.cost.toFixed(2);
+        } else {
+            document.getElementById("order-id").innerText = "N/A";
+            document.getElementById("order-details").innerText = "Could not retrieve order details.";
+            document.getElementById("order-total").innerText = "--";
+        }
     </script>
 </body>
 </html>
